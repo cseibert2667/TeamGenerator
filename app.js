@@ -1,20 +1,3 @@
-// Node modules
-const path = require("path");
-const fs = require("fs");
-// NPM modules
-const inquirer = require("inquirer");
-// Constructors
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
-
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
-
-const render = require("./lib/htmlRenderer");
-const { listenerCount } = require("process");
-
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
@@ -45,83 +28,51 @@ const { listenerCount } = require("process");
 //     new Engineer
 // ]){}
 
-inquirer.prompt([
-    {
-        message: "What is your manager's name?",
-        name: "name"
-    },
-    {
-        message: "What is your manager's id?",
-        name: "id"
-    },
-    {
-        message: "What is your manager's email?",
-        name: "email"
-    },
-    {
-        message: "What is your manager's office number?",
-        name: "officeNumber"
-    }
-    
-]).then(function(manager){
-    // Build manager object, push into employees array
-    console.log(manager);
-    inquirer.prompt([
-        {
-            type: "list",
-            message: "Who would you like to add to the team?",
-            name: "engineerOrIntern",
-            choices: ["Engineer", "Intern", "Quit"]
-        }
-    ]).then(function ({engineerOrIntern}){
-        if(engineerOrIntern === "Engineer"){
-            //engineer details prompts
-            inquirer.prompt([
-                {
-                    message: "What is your engineer's name?",
-                    name: "name"
-                },
-                {
-                    message: "What is your engineer's id?",
-                    name: "id"
-                },
-                {
-                    message: "What is your engineer's email?",
-                    name: "email"
-                },
-                {
-                    message: "What is your engineer's github?",
-                    name: "github"
-                },
-            ]).then(function(engineer){
-                
-            })
-        } else if (engineerOrIntern === "Intern") {
-            //intern details prompt
-            inquirer.prompt([
-                {
-                    message: "What is your interns's name?",
-                    name: "name"
-                },
-                {
-                    message: "What is your interns's id?",
-                    name: "id"
-                },
-                {
-                    message: "What is your interns's email?",
-                    name: "email"
-                },
-                {
-                    message: "What is your interns's github?",
-                    name: "github"
-                },
-            ]).then(function(intern){
-                // build intern object, add to employees array
-            })
-        } else {
-            // write file
-        }
-    })
-})
+// Node modules
+const path = require("path");
+const fs = require("fs");
+// Constructors
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 
-// move prompt functions to separate file, .thens on this page
+const OUTPUT_DIR = path.resolve(__dirname, "output");
+const outputPath = path.join(OUTPUT_DIR, "team.html");
+
+const render = require("./lib/htmlRenderer");
+const { listenerCount } = require("process");
+
+const {
+  managerPrompt,
+  addEmployee,
+  internPrompt,
+  engineerPrompt,
+} = require("./lib/prompts");
+const employees = [];
+
+managerPrompt().then(function (manager) {
+  employees.push(
+    new Manager(manager.name, manager.id, manager.email, manager.officeNumber)
+  );
+  main();
+});
+
+function main() {
+  addEmployee().then(function ({ engineerOrIntern }) {
+    if (engineerOrIntern === "Engineer") {
+      engineerPrompt().then(function (engineer) {
+        // build engineer push to array
+        // prompt for another employee
+        main();
+      });
+    } else if (engineerOrIntern === "Intern") {
+      internPrompt().then(function (intern) {
+        // build intern object, add to employees array
+        // prompt for another employee
+        main();
+      });
+    } else {
+      // write file
+    }
+  });
+}
