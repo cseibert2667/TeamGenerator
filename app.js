@@ -42,15 +42,18 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const { listenerCount } = require("process");
 
+// inquire prompts
 const {
   managerPrompt,
   addEmployee,
   internPrompt,
   engineerPrompt,
 } = require("./lib/prompts");
+// array where created employees will be stored
 const employees = [];
 
 managerPrompt().then(function (manager) {
+    // builds manager, pushes to array
   employees.push(
     new Manager(manager.name, manager.id, manager.email, manager.officeNumber)
   );
@@ -61,18 +64,24 @@ function main() {
   addEmployee().then(function ({ engineerOrIntern }) {
     if (engineerOrIntern === "Engineer") {
       engineerPrompt().then(function (engineer) {
-        // build engineer push to array
+        // builds engineer, pushes to array
+        employees.push(
+            new Engineer(engineer.name, engineer.id, engineer.email, engineer.github)
+          );
         // prompt for another employee
         main();
       });
     } else if (engineerOrIntern === "Intern") {
       internPrompt().then(function (intern) {
-        // build intern object, add to employees array
+        // builds intern, pushes to array
+        employees.push(
+            new Intern(intern.name, intern.id, intern.email, intern.school)
+          );
         // prompt for another employee
         main();
       });
     } else {
-      // write file
+      console.log(employees)
     }
   });
 }
