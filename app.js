@@ -12,6 +12,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { listenerCount } = require("process");
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -43,3 +44,84 @@ const render = require("./lib/htmlRenderer");
 //     new Intern
 //     new Engineer
 // ]){}
+
+inquirer.prompt([
+    {
+        message: "What is your manager's name?",
+        name: "name"
+    },
+    {
+        message: "What is your manager's id?",
+        name: "id"
+    },
+    {
+        message: "What is your manager's email?",
+        name: "email"
+    },
+    {
+        message: "What is your manager's office number?",
+        name: "officeNumber"
+    }
+    
+]).then(function(manager){
+    // Build manager object, push into employees array
+    console.log(manager);
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Who would you like to add to the team?",
+            name: "engineerOrIntern",
+            choices: ["Engineer", "Intern", "Quit"]
+        }
+    ]).then(function ({engineerOrIntern}){
+        if(engineerOrIntern === "Engineer"){
+            //engineer details prompts
+            inquirer.prompt([
+                {
+                    message: "What is your engineer's name?",
+                    name: "name"
+                },
+                {
+                    message: "What is your engineer's id?",
+                    name: "id"
+                },
+                {
+                    message: "What is your engineer's email?",
+                    name: "email"
+                },
+                {
+                    message: "What is your engineer's github?",
+                    name: "github"
+                },
+            ]).then(function(engineer){
+                
+            })
+        } else if (engineerOrIntern === "Intern") {
+            //intern details prompt
+            inquirer.prompt([
+                {
+                    message: "What is your interns's name?",
+                    name: "name"
+                },
+                {
+                    message: "What is your interns's id?",
+                    name: "id"
+                },
+                {
+                    message: "What is your interns's email?",
+                    name: "email"
+                },
+                {
+                    message: "What is your interns's github?",
+                    name: "github"
+                },
+            ]).then(function(intern){
+                // build intern object, add to employees array
+            })
+        } else {
+            // write file
+        }
+    })
+})
+
+// move prompt functions to separate file, .thens on this page
