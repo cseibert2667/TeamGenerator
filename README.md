@@ -15,7 +15,11 @@ To use this app, you first need to install the dependencies by running `npm inst
 ## Examples:
 Below is an example of a webpage generated using this application:
 
-![example](./assets/preview.png)
+<img src="./assets/preview.png" alt="preview" width="700"/>
+
+Follow the link below to watch a brief video demonstrating the functionality of the app: (Sorry - it was a bit too long to covert to a GIF)
+
+[Demo Video](https://drive.google.com/file/d/1vqpYwsuYC2AK75GNx6IdHhiyZjlodkpZ/view?usp=sharing)
 
 ## Questions?
 Please direct all questions to cseibert2667@gmail.com, and be sure to check out my other projects at [cseibert2667](https://www.github.com/cseibert2667).
